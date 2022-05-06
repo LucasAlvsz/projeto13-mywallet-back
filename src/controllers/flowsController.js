@@ -1,7 +1,7 @@
 import db from "../db/db.js"
 import { getDate } from "../usables/getDaysjs.js"
 
-export const PostInflows = async (req, res) => {
+export const postInflows = async (req, res) => {
 	const { value, description } = req.body
 	const { userId } = res.locals
 	try {
