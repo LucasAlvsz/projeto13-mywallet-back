@@ -1,31 +1,40 @@
 import db from "../db/db.js"
 import { getDate } from "../usables/getDaysjs.js"
 
-export const postInflows = async (req, res) => {
-	const { value, description } = req.body
+export const postFlows = async (req, res) => {
+	const { value, description, type } = req.body
 	const { userId } = res.locals
 	try {
 		await db
-			.collection("inflows")
-			.insertOne({ userId, value, description, date: getDate() })
+			.collection("flows")
+			.insertOne({ userId, value, description, type, date: getDate() })
+		res.sendStatus(201)
 	} catch (err) {
 		console.error(err)
 		res.sendStatus(500)
 	}
 }
 
-export const getInflows = async (req, res) => {
+export const getFlows = async (req, res) => {
 	const { userId } = res.locals
+	console.log(userId)
 	const { limit } = req.params
 	const options = { limit }
 	try {
 		const inflows = await db
-			.collection("inflows")
-			.find({ _id: userId }, options)
+			.collection("flows")
+			.find({ userId: userId }, options)
 			.toArray()
-		res.send(inflows)
+		res.send(
+			inflows.map(({ value, description, type, date }) => ({
+				value,
+				description,
+				type,
+				date,
+			}))
+		)
 	} catch (err) {
 		console.log(err)
-		res.statusSend(500)
+		res.status(500)
 	}
 }

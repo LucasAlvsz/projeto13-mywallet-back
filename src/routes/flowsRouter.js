@@ -4,10 +4,12 @@ import {
 	postFlowValidator,
 	getFlowsValidator,
 } from "../middlewares/flowsMiddleware.js"
-import { tokenValidator } from "../middlewares/tokenMiddleware"
-import { postInflows, getInflows } from "../controllers/flowsController.js"
+import { tokenValidator } from "../middlewares/tokenMiddleware.js"
+import { postFlows, getFlows } from "../controllers/flowsController.js"
 
 const flowsRouter = Router()
 
-flowsRouter.post("/inflows", postFlowValidator, tokenValidator, postInflows)
-flowsRouter.get("/inflows", getFlowsValidator, tokenValidator, getInflows)
+flowsRouter.post("/flows", postFlowValidator, tokenValidator, postFlows)
+flowsRouter.get("/flows", getFlowsValidator, tokenValidator, getFlows)
+
+export default flowsRouter
