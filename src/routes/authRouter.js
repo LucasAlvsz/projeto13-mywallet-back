@@ -1,10 +1,13 @@
 import { Router } from "express"
 import { singUp, singIn } from "../controllers/authController.js"
-import { validSingUp, validSingIn } from "../middlewares/authMiddleware.js"
+import {
+	singUpValidator,
+	singInValidator,
+} from "../middlewares/authMiddleware.js"
 
 const authRouter = Router()
 
-authRouter.post("/singUp", validSingUp, singUp)
-authRouter.post("/singIn", validSingIn, singIn)
+authRouter.post("/singUp", singUpValidator, singUp)
+authRouter.post("/singIn", singInValidator, singIn)
 
 export default authRouter

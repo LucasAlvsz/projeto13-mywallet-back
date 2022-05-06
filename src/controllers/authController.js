@@ -2,11 +2,13 @@ import { v4 as uuid } from "uuid"
 import bcrypt from "bcrypt"
 
 import db from "../db/db.js"
-import { getTime } from "../usables/getTime.js"
+import { getDateAndTime } from "../usables/getDaysjs.js"
 export const singUp = async (req, res) => {
 	const { name, email, password } = req.body
 	try {
 		const encryptedPassword = bcrypt.hashSync(password, 10)
+		const userExist = await db.collection("users").findOne({ email })
+		if (userExist) return res.status(409).send("Email já cadastrado!")
 		await db
 			.collection("users")
 			.insertOne({ name, email, password: encryptedPassword })
@@ -28,23 +30,27 @@ export const singIn = async (req, res) => {
 				.collection("sessions")
 				.findOne({ userId: user._id, loggedIn: true })
 			if (session) {
-				await db
-					.collection("sessions")
-					.update(
-						{ userId: user._id },
-						{ $set: { loggedIn: false, loggoutDate: getTime() } }
-					)
+				await db.collection("sessions").update(
+					{ userId: user._id },
+					{
+						$set: {
+							loggedIn: false,
+							loggoutDate: getDateAndTime(),
+						},
+					}
+				)
 				return res
 					.status(409)
 					.send(
-						"Sua conta MyWallet está conectada a outro dispositivo!Por segurança todas as outras contas MyWallets foram desconectadas!"
+						"Sua conta MyWallet está conectada a outro dispositivo!\
+                        Por segurança todas as outras contas MyWallets foram desconectadas!"
 					)
 			}
 			await db.collection("sessions").insertOne({
 				userId: user._id,
 				token,
 				loggedIn: true,
-				loginDate: getTime(),
+				loginDate: getDateAndTime(),
 				loggoutDate: null,
 			})
 			return res.send({ token })
