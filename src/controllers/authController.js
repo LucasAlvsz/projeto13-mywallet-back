@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb"
 
 import db from "../db/db.js"
 import { getDateAndTime } from "../usables/getDaysjs.js"
+
 export const singUp = async (req, res) => {
 	const { name, email, password } = req.body
 	try {
