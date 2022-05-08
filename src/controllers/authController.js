@@ -32,7 +32,7 @@ export const singIn = async (req, res) => {
 				.collection("sessions")
 				.findOne({ userId: user._id, loggedIn: true })
 			if (session) {
-				await db.collection("sessions").update(
+				await db.collection("sessions").updateMany(
 					{ userId: user._id },
 					{
 						$set: {

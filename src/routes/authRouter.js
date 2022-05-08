@@ -7,7 +7,7 @@ import {
 } from "../middlewares/authMiddleware.js"
 
 const authRouter = Router()
-
+authRouter.get("/", (req, res) => res.send("Hello World!"))
 authRouter.post("/singup", singUpValidator, singUp)
 authRouter.post("/singin", singInValidator, singIn)
 authRouter.post("/singout", tokenValidator, singOut)
