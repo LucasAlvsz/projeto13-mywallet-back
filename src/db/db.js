@@ -5,7 +5,7 @@ dotenv.config()
 
 let db = null
 try {
-	const mongoClient = new MongoClient(process.env.DATABASE_URL)
+	const mongoClient = new MongoClient(process.env.MONGO_URI)
 	await mongoClient.connect()
 	db = mongoClient.db(process.env.DATABASE_NAME)
 } catch (err) {

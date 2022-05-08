@@ -1,5 +1,6 @@
 import { Router } from "express"
-import { singUp, singIn } from "../controllers/authController.js"
+import { singUp, singIn, singOut } from "../controllers/authController.js"
+import { tokenValidator } from "../middlewares/tokenMiddleware.js"
 import {
 	singUpValidator,
 	singInValidator,
@@ -7,7 +8,8 @@ import {
 
 const authRouter = Router()
 
-authRouter.post("/singUp", singUpValidator, singUp)
-authRouter.post("/singIn", singInValidator, singIn)
+authRouter.post("/singup", singUpValidator, singUp)
+authRouter.post("/singin", singInValidator, singIn)
+authRouter.post("/singout", tokenValidator, singOut)
 
 export default authRouter

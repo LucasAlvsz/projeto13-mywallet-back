@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid"
 import bcrypt from "bcrypt"
+import { ObjectId } from "mongodb"
 
 import db from "../db/db.js"
 import { getDateAndTime } from "../usables/getDaysjs.js"
@@ -53,9 +54,28 @@ export const singIn = async (req, res) => {
 				loginDate: getDateAndTime(),
 				loggoutDate: null,
 			})
-			return res.send({ token })
+			return res.send({ name: user.name, token })
 		}
 		res.status(401).send("Email e/ou Senha incorreto(os)")
+	} catch (err) {
+		console.log(err)
+		res.sendStatus(500)
+	}
+}
+
+export const singOut = async (req, res) => {
+	const { userId } = res.locals
+	try {
+		await db.collection("sessions").updateMany(
+			{ userId: ObjectId(userId) },
+			{
+				$set: {
+					loggedIn: false,
+					loggoutDate: getDateAndTime(),
+				},
+			}
+		)
+		res.sendStatus(200)
 	} catch (err) {
 		console.log(err)
 		res.sendStatus(500)
