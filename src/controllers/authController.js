@@ -60,7 +60,7 @@ export const singIn = async (req, res) => {
 		res.status(401).send("Email e/ou Senha incorreto(os)")
 	} catch (err) {
 		console.log(err)
-		res.sendStatus(500)
+		res.status(500).send(err)
 	}
 }
 
