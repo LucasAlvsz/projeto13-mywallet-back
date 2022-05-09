@@ -1,15 +1,14 @@
 import { Router } from "express"
-import { singUp, singIn, singOut } from "../controllers/authController.js"
+import { signUp, signIn, signOut } from "../controllers/authController.js"
 import { tokenValidator } from "../middlewares/tokenMiddleware.js"
 import {
-	singUpValidator,
-	singInValidator,
+	signUpValidator,
+	signInValidator,
 } from "../middlewares/authMiddleware.js"
 
 const authRouter = Router()
-authRouter.get("/", (req, res) => res.send("Hello World!"))
-authRouter.post("/singup", singUpValidator, singUp)
-authRouter.post("/singin", singInValidator, singIn)
-authRouter.post("/singout", tokenValidator, singOut)
+authRouter.post("/signUp", signUpValidator, signUp)
+authRouter.post("/signIn", signInValidator, signIn)
+authRouter.post("/signOut", tokenValidator, signOut)
 
 export default authRouter

@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb"
 import db from "../db/db.js"
 import { getDateAndTime } from "../usables/getDaysjs.js"
 
-export const singUp = async (req, res) => {
+export const signUp = async (req, res) => {
 	const { name, email, password } = req.body
 	try {
 		const encryptedPassword = bcrypt.hashSync(password, 10)
@@ -22,7 +22,7 @@ export const singUp = async (req, res) => {
 	}
 }
 
-export const singIn = async (req, res) => {
+export const signIn = async (req, res) => {
 	const { email, password } = req.body
 	try {
 		const user = await db.collection("users").findOne({ email })
@@ -64,7 +64,7 @@ export const singIn = async (req, res) => {
 	}
 }
 
-export const singOut = async (req, res) => {
+export const signOut = async (req, res) => {
 	const { userId } = res.locals
 	try {
 		await db.collection("sessions").updateMany(

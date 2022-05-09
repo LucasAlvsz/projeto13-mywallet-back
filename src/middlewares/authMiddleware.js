@@ -1,5 +1,5 @@
 import joi from "joi"
-export const singInValidator = async (req, res, next) => {
+export const signInValidator = async (req, res, next) => {
 	const schema = joi.object({
 		email: joi.string().email().required(),
 		password: joi.string().required(),
@@ -9,7 +9,7 @@ export const singInValidator = async (req, res, next) => {
 	next()
 }
 
-export const singUpValidator = async (req, res, next) => {
+export const signUpValidator = async (req, res, next) => {
 	const schema = joi.object({
 		name: joi.string().required(),
 		email: joi.string().email().required(),
