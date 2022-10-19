@@ -1,6 +1,6 @@
 import db from "../db/db.js"
 import { ObjectId } from "mongodb"
-import { getDate } from "../usables/getDaysjs.js"
+import { getDate } from "../utils/getDaysjs.js"
 
 export const postFlows = async (req, res) => {
 	const { description, type } = req.body
@@ -22,10 +22,7 @@ export const getFlows = async (req, res) => {
 	const { limit } = req.params
 	const options = { limit }
 	try {
-		const inflows = await db
-			.collection("flows")
-			.find({ userId: userId }, options)
-			.toArray()
+		const inflows = await db.collection("flows").find({ userId: userId }, options).toArray()
 		res.send(
 			inflows.map(({ _id, value, description, type, date }) => ({
 				flowId: _id,
@@ -48,10 +45,7 @@ export const putFlows = async (req, res) => {
 	try {
 		await db
 			.collection("flows")
-			.updateOne(
-				{ _id: flowId, userId },
-				{ $set: { value, description, type } }
-			)
+			.updateOne({ _id: flowId, userId }, { $set: { value, description, type } })
 		res.sendStatus(200)
 	} catch (err) {
 		console.log(err)
@@ -79,21 +73,13 @@ export const putFlow = async (req, res) => {
 	const { userId } = res.locals
 	const { flowId } = req.params
 	try {
-		const flow = await db
-			.collection("flows")
-			.findOne({ _id: ObjectId(flowId), userId })
+		const flow = await db.collection("flows").findOne({ _id: ObjectId(flowId), userId })
 
 		if (!flow) return res.status(404).send("Flow not found")
 		const { modifiedCount } = await db
 			.collection("flows")
-			.updateOne(
-				{ _id: ObjectId(flowId), userId },
-				{ $set: { value, description, type } }
-			)
-		if (!modifiedCount)
-			return res
-				.status(409)
-				.send("A nova entrada/saida é igual a anterior")
+			.updateOne({ _id: ObjectId(flowId), userId }, { $set: { value, description, type } })
+		if (!modifiedCount) return res.status(409).send("A nova entrada/saida é igual a anterior")
 		res.sendStatus(200)
 	} catch (err) {
 		console.log(err)

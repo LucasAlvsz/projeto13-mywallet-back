@@ -3,7 +3,7 @@ import bcrypt from "bcrypt"
 import { ObjectId } from "mongodb"
 
 import db from "../db/db.js"
-import { getDateAndTime } from "../usables/getDaysjs.js"
+import { getDateAndTime } from "../utils/getDaysjs.js"
 
 export const signUp = async (req, res) => {
 	const { name, email, password } = req.body
@@ -11,9 +11,7 @@ export const signUp = async (req, res) => {
 		const encryptedPassword = bcrypt.hashSync(password, 10)
 		const userExist = await db.collection("users").findOne({ email })
 		if (userExist) return res.status(409).send("Email já cadastrado!")
-		await db
-			.collection("users")
-			.insertOne({ name, email, password: encryptedPassword })
+		await db.collection("users").insertOne({ name, email, password: encryptedPassword })
 
 		res.sendStatus(201)
 	} catch (err) {
